@@ -1,0 +1,226 @@
+restart
+#-----------------------------------------------------------
+# Reset
+add_force {/splite/ck} -radix hex {1 0ns} {0 50000ps} -repeat_every 100000ps
+add_force {/splite/run} -radix hex {0 0ns}
+add_force {/splite/reset} -radix hex {1 0ns}
+add_force {/splite/bus2mem_en} -radix hex {1 0ns}
+add_force {/splite/bus2mem_we} -radix hex {1 0ns}
+add_force {/splite/bus2mem_addr} -radix hex {1 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {0 0ns}
+run 100 ns
+
+# lower reset puts processor in idle
+add_force {/splite/reset} -radix hex {0 0ns}
+run 100 ns
+
+
+#---------------------Initialize the value of n------------------------------#
+#SC -- function factorial is at d1
+add_force {/splite/bus2mem_addr} -radix hex {0 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+# value = ADDRESS of i - ADDRESS
+add_force {/splite/bus2mem_addr} -radix hex {1 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {4 0ns}
+run 100 ns
+
+#-------------------number of arguments = 1--------------------------------------#
+#SC -- function factorial is at d1
+add_force {/splite/bus2mem_addr} -radix hex {2 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+# value = ADDRESS of i - ADDRESS
+add_force {/splite/bus2mem_addr} -radix hex {3 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+#------------------function to jump to --------------------------------------#
+#SC -- function factorial is at d1
+add_force {/splite/bus2mem_addr} -radix hex {4 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+# value = ADDRESS of i - ADDRESS
+add_force {/splite/bus2mem_addr} -radix hex {5 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {d1 0ns}
+run 100 ns
+
+#-----------call the stack-------------------------------------------------------#
+add_force {/splite/bus2mem_addr} -radix hex {6 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {e6 0ns}
+run 100 ns
+
+#------------------------FUNCTION definition------------------------------------#
+#store first argument - SP 128  --this is just a random constant that will be added each iteration
+
+#SC -- function factorial is at d1
+add_force {/splite/bus2mem_addr} -radix hex {d1 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+# value = ADDRESS of i - ADDRESS
+add_force {/splite/bus2mem_addr} -radix hex {d2 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {0 0ns}
+run 100 ns
+
+#SLAA
+add_force {/splite/bus2mem_addr} -radix hex {d3 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {b 0ns}
+run 100 ns
+
+#SL
+add_force {/splite/bus2mem_addr} -radix hex {d4 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {11 0ns}
+run 100 ns
+
+
+#SC -- value of 0
+add_force {/splite/bus2mem_addr} -radix hex {d5 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+# value = ADDRESS of i - ADDRESS
+add_force {/splite/bus2mem_addr} -radix hex {d6 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {0 0ns}
+run 100 ns
+
+#scmp
+add_force {/splite/bus2mem_addr} -radix hex {d7 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {f1 0ns}
+run 100 ns
+
+#SC -- SMALL
+add_force {/splite/bus2mem_addr} -radix hex {d8 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+# value = when it is equal to 0 where to jump
+add_force {/splite/bus2mem_addr} -radix hex {d9 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {120 0ns}
+run 100 ns
+
+
+#sjeq
+add_force {/splite/bus2mem_addr} -radix hex {da 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {71 0ns}
+run 100 ns
+
+#--------------------$stack n------------------------------#
+#SC
+add_force {/splite/bus2mem_addr} -radix hex {db 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+#
+add_force {/splite/bus2mem_addr} -radix hex {dc 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {0 0ns}
+run 100 ns
+
+#SLAA
+add_force {/splite/bus2mem_addr} -radix hex {dd 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {b 0ns}
+run 100 ns
+
+#SL
+add_force {/splite/bus2mem_addr} -radix hex {de 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {11 0ns}
+run 100 ns
+
+#----------------------fact(n-1)----------------------------#
+#SC
+add_force {/splite/bus2mem_addr} -radix hex {df 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+#
+add_force {/splite/bus2mem_addr} -radix hex {e0 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {0 0ns}
+run 100 ns
+
+#SLAA
+add_force {/splite/bus2mem_addr} -radix hex {e1 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {b 0ns}
+run 100 ns
+
+#SL
+add_force {/splite/bus2mem_addr} -radix hex {e2 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {11 0ns}
+run 100 ns
+
+
+#SC
+add_force {/splite/bus2mem_addr} -radix hex {e3 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+#
+add_force {/splite/bus2mem_addr} -radix hex {e4 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+
+#ssub
+add_force {/splite/bus2mem_addr} -radix hex {e5 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {41 0ns}
+run 100 ns
+
+#SC
+add_force {/splite/bus2mem_addr} -radix hex {e6 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+#
+add_force {/splite/bus2mem_addr} -radix hex {e7 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+
+#sc -factorial
+add_force {/splite/bus2mem_addr} -radix hex {e8 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+
+add_force {/splite/bus2mem_addr} -radix hex {e9 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {d1 0ns}
+run 100 ns
+
+#SCALL
+add_force {/splite/bus2mem_addr} -radix hex {ea 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {e6 0ns}
+run 100 ns
+
+#SMUL
+add_force {/splite/bus2mem_addr} -radix hex {eb 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {101 0ns}
+run 100 ns
+
+#srtn
+add_force {/splite/bus2mem_addr} -radix hex {ec 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {f9 0ns}
+run 100 ns
+
+
+
+#small
+#SC
+add_force {/splite/bus2mem_addr} -radix hex {120 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+# value = when it is equal to 0 where to jump
+add_force {/splite/bus2mem_addr} -radix hex {121 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {1 0ns}
+run 100 ns
+
+
+#srtn
+add_force {/splite/bus2mem_addr} -radix hex {122 0ns}
+add_force {/splite/bus2mem_data_in} -radix hex {f9 0ns}
+run 100 ns
+
+#halt
+#add_force {/splite/bus2mem_addr} -radix hex {123 0ns}
+#add_force {/splite/bus2mem_data_in} -radix hex {ff 0ns}
+#run 100 ns
+
+#  Lower bus2mem_en, bus2mem_we and run
+ add_force {/splite/bus2mem_en} -radix hex {0 0ns}
+ add_force {/splite/bus2mem_we} -radix hex {0 0ns}
+ add_force {/splite/run} -radix hex {1 0ns}
+ run 100 ns
+ run 3000000 ns 
+
+ # Read address 128 and 129 Is <128> = 100?;
+ add_force {/splite/bus2mem_en} -radix hex {1 0ns}
+ add_force {/splite/bus2mem_we} -radix hex {0 0ns}
+ add_force {/splite/bus2mem_addr} -radix hex {80 0ns}
+ run 300 ns
